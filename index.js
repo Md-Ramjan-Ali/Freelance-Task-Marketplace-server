@@ -32,6 +32,22 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const taskCollection = client.db("jobPondDB").collection('tasks');
+
+    //get data on db
+    app.get('/tasks',async(req,res)=>{
+      const cursor=taskCollection.find()
+      const result=await cursor.toArray()
+      res.send(result)
+    })
+
+    //post the task data
+    app.post('/tasks',async(req,res)=>{
+      const newTask=req.body
+      const result=await taskCollection.insertOne(newTask)
+      res.send(result)
+    })
+
 
 
 
