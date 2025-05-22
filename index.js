@@ -62,6 +62,22 @@ async function run() {
       res.send(result);
     });
 
+    //new data set and set data in db
+    app.patch('/tasks/:id/bid',async(req,res)=>{
+      const id =req.params.id
+      const filter={_id: new ObjectId(id)}
+
+      const incBid = {
+        $inc: {
+          bidsCount: 1
+        },
+      };
+
+      const result=await taskCollection.updateOne(filter,incBid)
+      res.send(result)
+
+    })
+
     //delete the on db
     app.delete("/tasks/:id", async (req, res) => {
       const id = req.params.id;
