@@ -33,6 +33,16 @@ async function run() {
       res.send(result);
     });
 
+    //feature task data condition
+    app.get("/tasks/featuretasks", async (req, res) => {
+      const result = await taskCollection
+        .find()
+        .sort({ deadline: 1 })
+        .limit(6)
+        .toArray();
+        res.send(result)
+    });
+
     app.get("/tasks/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -63,20 +73,19 @@ async function run() {
     });
 
     //new data set and set data in db
-    app.patch('/tasks/:id/bid',async(req,res)=>{
-      const id =req.params.id
-      const filter={_id: new ObjectId(id)}
+    app.patch("/tasks/:id/bid", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
 
       const incBid = {
         $inc: {
-          bidsCount: 1
+          bidsCount: 1,
         },
       };
 
-      const result=await taskCollection.updateOne(filter,incBid)
-      res.send(result)
-
-    })
+      const result = await taskCollection.updateOne(filter, incBid);
+      res.send(result);
+    });
 
     //delete the on db
     app.delete("/tasks/:id", async (req, res) => {
