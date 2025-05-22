@@ -37,7 +37,7 @@ async function run() {
     app.get("/tasks/featuretasks", async (req, res) => {
       const result = await taskCollection
         .find()
-        .sort({ deadline: 1 })
+        .sort({ deadline: -1 })
         .limit(6)
         .toArray();
         res.send(result)
