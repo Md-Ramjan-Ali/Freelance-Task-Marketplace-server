@@ -21,9 +21,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-
     const taskCollection = client.db("jobPondDB").collection("tasks");
 
     //get data on db
@@ -40,7 +37,7 @@ async function run() {
         .sort({ deadline: -1 })
         .limit(6)
         .toArray();
-        res.send(result)
+      res.send(result);
     });
 
     app.get("/tasks/:id", async (req, res) => {
@@ -94,15 +91,7 @@ async function run() {
       const result = await taskCollection.deleteOne(query);
       res.send(result);
     });
-
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    // console.log(
-    //   "Pinged your deployment. You successfully connected to MongoDB!"
-    // );
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
   }
 }
 run().catch(console.dir);
