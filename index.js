@@ -25,7 +25,7 @@ async function run() {
 
     //get data on db
     app.get("/tasks", async (req, res) => {
-      const { search, sort, category } = req.query;
+      const { search, sort, category, email } = req.query;
 
       const filter = {};
 
@@ -34,8 +34,13 @@ async function run() {
         filter.title = { $regex: search, $options: "i" };
       }
 
+      // filter by email
+      if (email) {
+        filter.email = email;
+      }
+
       // Filter by category
-      
+
       if (category) {
         filter.category = category;
       }
