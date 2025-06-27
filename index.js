@@ -25,8 +25,33 @@ async function run() {
 
     //get data on db
     app.get("/tasks", async (req, res) => {
-      const cursor = taskCollection.find();
-      const result = await cursor.toArray();
+      const { search, sort, category } = req.query;
+
+      const filter = {};
+
+      // Search by title only
+      if (search) {
+        filter.title = { $regex: search, $options: "i" };
+      }
+
+      // Filter by category
+      
+      if (category) {
+        filter.category = category;
+      }
+
+      const sortOption = {};
+      if (sort === "asc") {
+        sortOption.deadline = 1;
+      } else if (sort === "desc") {
+        sortOption.deadline = -1;
+      }
+
+      const result = await taskCollection
+        .find(filter)
+        .sort(sortOption)
+        .toArray();
+
       res.send(result);
     });
 
